@@ -1,0 +1,109 @@
+import React from "react";
+import Home from "./pages/Home";
+import Products from "./pages/Products";
+import { Route, Routes, Navigate } from "react-router-dom";
+import Navbar from "./components/layout/Navbar";
+import Footer from "./components/layout/Footer";
+import TopHeader from "./components/ui/TopHeader";
+import ProductDetails from "./pages/ProductDetail";
+import Login from "./pages/Login";
+import Signup from "./pages/SignUp";
+import Profile from "./pages/Profile";
+import ProtectedRoute from "./guard/protectedRoute";
+import Cart from "./pages/Cart";
+import Orders from "./pages/Orders";
+import OrderDetails from "./pages/OrderDetails";
+import PaymentReturn from "./pages/PaymentReturn";
+
+const App = () => {
+  const token = localStorage.getItem("token");
+
+  return (
+    <>
+      {/* <TopHeader /> */}
+      <Navbar />
+
+      <Routes>
+        {/* Public Routes */}
+        <Route
+          path="/login"
+          element={token ? <Navigate to="/" replace /> : <Login />}
+        />
+
+        <Route
+          path="/signup"
+          element={token ? <Navigate to="/" replace /> : <Signup />}
+        />
+        <Route path="/payment/return" element={<PaymentReturn />} />
+        
+        {/* Protected Routes */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute>
+              <Products />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/product-detail/:id"
+          element={
+            <ProtectedRoute>
+              <ProductDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <Orders />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/orders/:id"
+          element={
+            <ProtectedRoute>
+              <OrderDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+
+      <Footer />
+    </>
+  );
+};
+
+export default App;
