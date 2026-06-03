@@ -14,6 +14,7 @@ import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
 import PaymentReturn from "./pages/PaymentReturn";
+import AboutUs from "./pages/AboutUs";
 
 const App = () => {
   const token = localStorage.getItem("token");
@@ -36,6 +37,7 @@ const App = () => {
         />
         <Route path="/payment/return" element={<PaymentReturn />} />
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<AboutUs />} />
 
         {/* Protected Routes */}
         <Route

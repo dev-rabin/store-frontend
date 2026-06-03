@@ -5,7 +5,7 @@ import {
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { useEffect, useState } from "react";
@@ -17,6 +17,8 @@ export default function Navbar() {
   const { cartCount } = useCart();
   const userName = localStorage.getItem("user_name") || "U";
   const [search, setSearch] = useState("");
+
+  const isActive = (path) => location.pathname === path;
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -51,41 +53,53 @@ export default function Navbar() {
     <>
       <nav className="max-w-7xl mx-auto py-4 px-4 flex items-center justify-between">
         <Link to="/" className="text-2xl font-bold tracking-wide text-black">
-          Mobile Varse
+          MobileVarse
         </Link>
 
         <div className="hidden md:flex items-center gap-8 font-medium">
-          <Link to="/" className="hover:text-red-500 transition duration-200">
+          <NavLink
+            to="/"
+            className={`transition duration-200 ${
+              isActive("/")
+                ? "text-red-500 font-semibold"
+                : "hover:text-red-500"
+            }`}
+          >
             Home
-          </Link>
+          </NavLink>
 
-          <Link
+          <NavLink
             to="/orders"
-            className="hover:text-red-500 transition duration-200"
+            className={`transition duration-200 ${
+              isActive("/orders")
+                ? "text-red-500 font-semibold"
+                : "hover:text-red-500"
+            }`}
           >
             Orders
-          </Link>
+          </NavLink>
 
-          <Link
+          <NavLink
             to="/products"
-            className="hover:text-red-500 transition duration-200"
+            className={`transition duration-200 ${
+              isActive("/products")
+                ? "text-red-500 font-semibold"
+                : "hover:text-red-500"
+            }`}
           >
             Products
-          </Link>
+          </NavLink>
 
-          <Link
-            to="/contact"
-            className="hover:text-red-500 transition duration-200"
-          >
-            Contact
-          </Link>
-
-          <Link
+          <NavLink
             to="/about"
-            className="hover:text-red-500 transition duration-200"
+            className={`transition duration-200 ${
+              isActive("/about")
+                ? "text-red-500 font-semibold"
+                : "hover:text-red-500"
+            }`}
           >
             About
-          </Link>
+          </NavLink>
         </div>
 
         <div className="flex items-center gap-5">
