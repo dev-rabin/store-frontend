@@ -65,7 +65,6 @@ const Signup = () => {
               </p>
 
               <form onSubmit={handleSubmit}>
-                {/* Full Name */}
                 <div className="mb-5">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Full Name
@@ -82,7 +81,6 @@ const Signup = () => {
                   />
                 </div>
 
-                {/* Email */}
                 <div className="mb-5">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Email Address
@@ -99,24 +97,24 @@ const Signup = () => {
                   />
                 </div>
 
-                {/* Phone */}
                 <div className="mb-5">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Phone Number
                   </label>
-
                   <input
                     type="tel"
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="Enter your phone number"
+                    pattern="[0-9]{10}"
+                    maxLength={10}
+                    minLength={10}
                     className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-100"
                     required
                   />
                 </div>
 
-                {/* Password */}
                 <div className="mb-5">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Password
@@ -133,7 +131,6 @@ const Signup = () => {
                   />
                 </div>
 
-                {/* Confirm Password */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Confirm Password
@@ -150,22 +147,10 @@ const Signup = () => {
                   />
                 </div>
 
-                {/* Signup Button */}
                 <button
                   type="submit"
                   disabled={loading}
-                  className="
-                    w-full
-                    bg-red-500
-                    hover:bg-red-600
-                    text-white
-                    py-3
-                    rounded-xl
-                    font-semibold
-                    transition
-                    duration-300
-                    disabled:opacity-50
-                  "
+                  className=" w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-semibold transition duration-300 disabled:opacity-50"
                 >
                   {loading ? "Creating Account..." : "Create Account"}
                 </button>

@@ -27,25 +27,17 @@ const App = () => {
         {/* Public Routes */}
         <Route
           path="/login"
-          element={token ? <Navigate to="/" replace /> : <Login />}
+          element={token ? <Navigate to="/" /> : <Login />}
         />
 
         <Route
           path="/signup"
-          element={token ? <Navigate to="/" replace /> : <Signup />}
+          element={token ? <Navigate to="/" /> : <Signup />}
         />
         <Route path="/payment/return" element={<PaymentReturn />} />
-        
-        {/* Protected Routes */}
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/" element={<Home />} />
 
+        {/* Protected Routes */}
         <Route
           path="/products"
           element={

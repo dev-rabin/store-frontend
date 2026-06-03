@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { faHeart, faEye, faRotate } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeart,
+  faEye,
+  faRotate,
+  faForward,
+  faArrowCircleRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ViewAllBtn from "./ViewAllBtn";
 import Heading from "./Heading";
 import Loader from "./Loader";
 import { fetchNewArrivals } from "../../services/storeApis";
+import { useNavigate } from "react-router-dom";
 
 const DiscoverProducts = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -83,16 +91,11 @@ const DiscoverProducts = () => {
             duration-300
           "
               >
-                <button className="w-8 h-8 sm:w-9 sm:h-9 lg:w-11 lg:h-11 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-red-500 hover:text-white transition">
-                  <FontAwesomeIcon icon={faHeart} />
-                </button>
-
-                <button className="w-8 h-8 sm:w-9 sm:h-9 lg:w-11 lg:h-11 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-red-500 hover:text-white transition">
-                  <FontAwesomeIcon icon={faRotate} />
-                </button>
-
-                <button className="w-8 h-8 sm:w-9 sm:h-9 lg:w-11 lg:h-11 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-red-500 hover:text-white transition">
-                  <FontAwesomeIcon icon={faEye} />
+                <button
+                  onClick={() => navigate(`/product-detail/${product.id}`)}
+                  className="w-8 h-8 sm:w-9 sm:h-9 lg:w-11 lg:h-11 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-red-500 hover:text-white transition"
+                >
+                  <FontAwesomeIcon icon={faArrowCircleRight} />
                 </button>
               </div>
 
@@ -141,18 +144,8 @@ const DiscoverProducts = () => {
               {/* Content */}
               <div className="p-2 sm:p-3 md:p-4 lg:p-5">
                 <h3
-                  className="
-              text-xs
-              sm:text-sm
-              md:text-base
-              lg:text-lg
-              font-medium
-              text-gray-900
-              line-clamp-2
-              min-h-[36px]
-              sm:min-h-[42px]
-              md:min-h-[50px]
-            "
+                  onClick={() => navigate(`/product-detail/${product.id}`)}
+                  className=" text-xs sm:text-sm md:text-base lg:text-lg font-medium  text-gray-900 line-clamp-2 min-h-[36px] sm:min-h-[42px] md:min-h-[50px] hover:underline hover:cursor-pointer"
                 >
                   {product.name}
                 </h3>

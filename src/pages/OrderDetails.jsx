@@ -69,7 +69,11 @@ const OrderDetails = () => {
   };
 
   if (loading) {
-    return <Loader />;
+    return (
+      <div className=" min-h-screen flex justify-center items-center">
+        <Loader />
+      </div>
+    );
   }
 
   if (!order) {

@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useParams } from "react-router-dom";
 import { fetchProduct } from "../services/storeApis";
 import AddToCart from "../components/ui/AddToCart";
+import Loader from "../components/ui/Loader";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -35,7 +36,7 @@ const ProductDetails = () => {
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center">
-        Loading Product...
+        <Loader />
       </div>
     );
   }

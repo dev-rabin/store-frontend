@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const BannerGrid = () => {
+  const navigate = useNavigate();
   const [current, setCurrent] = useState(0);
 
   const banners = [
@@ -74,7 +76,10 @@ const BannerGrid = () => {
 
                     <p className="text-white/90 mb-6">{banner.subtitle}</p>
 
-                    <button className="bg-teal-600 text-white px-6 py-3 rounded-xl font-semibold">
+                    <button
+                      onClick={() => navigate("/products")}
+                      className="bg-teal-600 text-white px-6 py-3 rounded-xl font-semibold"
+                    >
                       {banner.button}
                     </button>
                   </div>
@@ -139,7 +144,10 @@ const BannerGrid = () => {
                 discounts.
               </p>
 
-              <button className="bg-teal-600 text-white px-8 py-4 rounded-xl w-fit">
+              <button
+                onClick={() => navigate("/products")}
+                className="bg-teal-600 text-white px-8 py-4 rounded-xl w-fit"
+              >
                 Shop Now
               </button>
             </div>
@@ -149,7 +157,7 @@ const BannerGrid = () => {
         {/* Middle Banner */}
         <div className="group col-span-3 relative rounded-3xl overflow-hidden cursor-pointer">
           <img
-            src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"
+            src="https://images.unsplash.com/photo-1620783770629-122b7f187703?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Sneakers"
             className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
           />
@@ -162,7 +170,10 @@ const BannerGrid = () => {
 
               <p className="text-white mb-6">As powerful as it is portable</p>
 
-              <button className="bg-black text-white px-7 py-3 rounded-full">
+              <button
+                onClick={() => navigate("/products")}
+                className="bg-black text-white px-7 py-3 rounded-full"
+              >
                 Explore
               </button>
             </div>
@@ -173,9 +184,9 @@ const BannerGrid = () => {
         <div className="col-span-3 flex flex-col gap-5">
           <div className="group relative flex-1 rounded-3xl overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1570829460005-c840387bb1ca"
+              src="https://images.unsplash.com/photo-1621319332247-ce870cdad56c?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Watch"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
             />
 
             <div className="absolute inset-0 bg-black/30 flex items-center px-3 sm:px-5 lg:px-8">
@@ -183,7 +194,10 @@ const BannerGrid = () => {
                 <h3 className="text-white text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2">
                   Smart Watches
                 </h3>
-                <button className="text-white border-b border-white text-xs sm:text-sm lg:text-base pb-0.5 hover:text-red-400 transition">
+                <button
+                  onClick={() => navigate("/products")}
+                  className="text-white border-b border-white text-xs sm:text-sm lg:text-base pb-0.5 hover:text-red-400 transition"
+                >
                   Shop Now →
                 </button>
               </div>
@@ -194,7 +208,7 @@ const BannerGrid = () => {
             <img
               src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e"
               alt="Headphones"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
             />
 
             <div className="absolute inset-0 bg-black/30 flex items-center px-8">
@@ -203,7 +217,10 @@ const BannerGrid = () => {
                   Audio Gear
                 </h3>
 
-                <button className="text-white border-b border-white">
+                <button
+                  onClick={() => navigate("/products")}
+                  className="text-white border-b border-white text-xs sm:text-sm lg:text-base pb-0.5 hover:text-red-400 transition"
+                >
                   Shop Now →
                 </button>
               </div>

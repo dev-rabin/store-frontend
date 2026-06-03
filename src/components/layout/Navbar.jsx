@@ -50,8 +50,8 @@ export default function Navbar() {
   return (
     <>
       <nav className="max-w-7xl mx-auto py-4 px-4 flex items-center justify-between">
-        <Link to="/" className="text-3xl font-bold tracking-wide text-black">
-          Shoppy
+        <Link to="/" className="text-2xl font-bold tracking-wide text-black">
+          Mobile Varse
         </Link>
 
         <div className="hidden md:flex items-center gap-8 font-medium">

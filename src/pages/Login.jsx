@@ -48,14 +48,7 @@ const Login = () => {
             <img
               src="/image/shopping.png"
               alt="Shopping"
-              className="
-            w-full
-            max-w-[180px]
-            sm:max-w-[250px]
-            md:max-w-[320px]
-            lg:max-w-md
-            object-contain
-          "
+              className=" w-full max-w-[180px] sm:max-w-[250px] md:max-w-[320px] lg:max-w-md object-contain"
             />
           </div>
 
@@ -84,23 +77,7 @@ const Login = () => {
                     value={formData.login}
                     onChange={handleChange}
                     placeholder="Enter email or phone"
-                    className="
-                  w-full
-                  border
-                  border-gray-300
-                  rounded-lg
-                  sm:rounded-xl
-                  px-3
-                  sm:px-4
-                  py-2.5
-                  sm:py-3
-                  text-sm
-                  sm:text-base
-                  outline-none
-                  focus:border-red-500
-                  focus:ring-2
-                  focus:ring-red-100
-                "
+                    className=" w-full border border-gray-300 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base outline-none focus:border-red-500 focus:ring-2 focus:ring-red-100"
                     required
                   />
                 </div>
@@ -117,23 +94,7 @@ const Login = () => {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Enter your password"
-                    className="
-                  w-full
-                  border
-                  border-gray-300
-                  rounded-lg
-                  sm:rounded-xl
-                  px-3
-                  sm:px-4
-                  py-2.5
-                  sm:py-3
-                  text-sm
-                  sm:text-base
-                  outline-none
-                  focus:border-red-500
-                  focus:ring-2
-                  focus:ring-red-100
-                "
+                    className=" w-full border border-gray-300 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base outline-none focus:border-red-500 focus:ring-2 focus:ring-red-100"
                     required
                   />
                 </div>

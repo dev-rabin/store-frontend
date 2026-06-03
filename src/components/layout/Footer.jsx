@@ -19,17 +19,13 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Support</h3>
 
             <ul className="space-y-2 text-gray-400">
-              <li>
-                New Colony, Palwal
-                <br />
-                Haryana, India 121102
-              </li>
+              <li>Noida, UP</li>
               <li>
                 <a
                   href="mailto:support@shoppy.com"
                   className="hover:text-white transition"
                 >
-                  support@shoppy.com
+                  support@mobilevarse.com
                 </a>
               </li>
               <li>
@@ -37,7 +33,7 @@ export default function Footer() {
                   href="tel:+919876543210"
                   className="hover:text-white transition"
                 >
-                  +91 98765 43210
+                  +91 9871090570
                 </a>
               </li>
             </ul>
@@ -88,18 +84,6 @@ export default function Footer() {
               <li>
                 <a href="#" className="hover:text-white transition">
                   Instagram
-                </a>
-              </li>
-
-              <li>
-                <a href="#" className="hover:text-white transition">
-                  LinkedIn
-                </a>
-              </li>
-
-              <li>
-                <a href="#" className="hover:text-white transition">
-                  GitHub
                 </a>
               </li>
             </ul>
