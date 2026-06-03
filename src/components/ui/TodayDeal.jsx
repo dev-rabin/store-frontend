@@ -97,26 +97,15 @@ const TodayDeal = () => {
               <img
                 src={product.img}
                 alt={product.name}
-                className="
-            h-full
-            w-full
-            object-contain
-            p-2
-            sm:p-3
-            lg:p-4
-            transition
-            duration-700
-            group-hover:scale-110
-            group-hover:rotate-2
-          "
+                className=" h-full w-full object-contain p-2 sm:p-3 lg:p-4 transition duration-700 group-hover:scale-110 group-hover:rotate-2"
               />
 
               <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition duration-500" />
 
-              <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 translate-y-20 gap-2 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+              <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 translate-y-20 gap-1 sm:gap-2 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
                 <button
                   onClick={() => navigate(`/product-detail/${product.id}`)}
-                  className="rounded-full bg-white px-3 py-1.5 text-xs sm:text-sm font-medium shadow-lg whitespace-nowrap"
+                  className="rounded-full bg-white px-2 py-1 text-[10px] sm:px-3 sm:py-1.5 sm:text-xs md:text-sm font-medium shadow-lg whitespace-nowrap"
                 >
                   Quick View
                 </button>

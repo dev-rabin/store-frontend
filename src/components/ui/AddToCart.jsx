@@ -31,7 +31,7 @@ const AddToCart = ({ productId }) => {
     <button
       onClick={handleAddToCart}
       disabled={loading}
-      className="rounded-full bg-black text-white px-5 py-2 text-sm font-medium shadow-lg whitespace-nowrap hover:bg-red-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+      className="rounded-full bg-black text-white px-2 py-1 text-[10px] sm:px-3 sm:py-1.5 sm:text-xs md:px-5 md:py-2 md:text-sm font-medium shadow-lg whitespace-nowrap hover:bg-red-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {loading ? "Adding..." : added ? "✓ Added" : "Add To Cart"}
     </button>

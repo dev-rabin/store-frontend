@@ -12,6 +12,7 @@ import Heading from "./Heading";
 import Loader from "./Loader";
 import { fetchNewArrivals } from "../../services/storeApis";
 import { useNavigate } from "react-router-dom";
+import AddToCart from "./AddToCart";
 
 const DiscoverProducts = () => {
   const navigate = useNavigate();
@@ -123,21 +124,10 @@ const DiscoverProducts = () => {
             "
                 />
 
-                <div
-                  className="
-              absolute
-              bottom-0
-              left-0
-              right-0
-              translate-y-full
-              group-hover:translate-y-0
-              transition-all
-              duration-300
-            "
-                >
-                  <button className="w-full bg-black text-white py-2 sm:py-2.5 lg:py-3 text-xs sm:text-sm lg:text-base font-medium hover:bg-red-500 transition">
-                    Add To Cart
-                  </button>
+                <div className="absolute bottom-0 left-0 w-full translate-y-full group-hover:translate-y-0 transition-all duration-300">
+                  <div className="w-full flex justify-center">
+                    <AddToCart productId={product.id} />
+                  </div>
                 </div>
               </div>
 
