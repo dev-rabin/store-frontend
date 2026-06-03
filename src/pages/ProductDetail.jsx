@@ -103,7 +103,7 @@ const ProductDetails = () => {
             </h1>
 
             {/* Rating */}
-            <div className="flex items-center mt-3 sm:mt-4">
+            {/* <div className="flex items-center mt-3 sm:mt-4">
               <div className="flex gap-1 text-amber-400 text-sm sm:text-base">
                 {[...Array(5)].map((_, index) => (
                   <FontAwesomeIcon key={index} icon={faStar} />
@@ -113,7 +113,7 @@ const ProductDetails = () => {
               <span className="ml-2 sm:ml-3 text-xs sm:text-sm text-gray-500">
                 (24 Reviews)
               </span>
-            </div>
+            </div> */}
 
             {/* Price */}
             <div className="mt-4 sm:mt-6">

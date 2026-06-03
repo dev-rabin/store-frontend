@@ -123,7 +123,7 @@ const TodayDeal = () => {
                 {product.name}
               </h3>
 
-              <div className="mb-3 lg:mb-4 flex items-center">
+              {/* <div className="mb-3 lg:mb-4 flex items-center">
                 <div className="flex gap-0.5 sm:gap-1 text-amber-400 text-xs sm:text-sm">
                   {[...Array(Math.round(product.rating || 5))].map(
                     (_, index) => (
@@ -135,7 +135,7 @@ const TodayDeal = () => {
                 <span className="ml-1 sm:ml-2 text-xs sm:text-sm text-gray-500">
                   ({product.reviews || 0})
                 </span>
-              </div>
+              </div> */}
 
               <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
                 <div>

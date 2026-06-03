@@ -253,7 +253,7 @@ const Products = () => {
                     {product.name}
                   </h3>
 
-                  <div className="flex items-center gap-1 text-amber-400 text-xs sm:text-sm mt-2">
+                  {/* <div className="flex items-center gap-1 text-amber-400 text-xs sm:text-sm mt-2">
                     {[...Array(5)].map((_, index) => (
                       <FontAwesomeIcon key={index} icon={faStar} />
                     ))}
@@ -261,7 +261,7 @@ const Products = () => {
                     <span className="text-gray-500 ml-1 text-xs sm:text-sm">
                       (24)
                     </span>
-                  </div>
+                  </div> */}
 
                   <div className="flex justify-between items-center mt-3 lg:mt-4">
                     <span className="text-sm sm:text-lg lg:text-xl font-bold text-red-500">
