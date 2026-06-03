@@ -38,25 +38,10 @@ const App = () => {
         <Route path="/payment/return" element={<PaymentReturn />} />
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
-
+        <Route path="/products" element={<Products />} />
+        <Route path="/product-detail/:id" element={<ProductDetails />} />
+        
         {/* Protected Routes */}
-        <Route
-          path="/products"
-          element={
-            <ProtectedRoute>
-              <Products />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/product-detail/:id"
-          element={
-            <ProtectedRoute>
-              <ProductDetails />
-            </ProtectedRoute>
-          }
-        />
 
         <Route
           path="/cart"
