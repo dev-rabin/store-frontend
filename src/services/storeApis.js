@@ -138,9 +138,9 @@ export const removeCart = async (id) => {
   }
 };
 
-export const checkout = async () => {
+export const checkout = async (payload) => {
   try {
-    const res = await API.post("/checkout");
+    const res = await API.post("/checkout", payload);
     return res.data;
   } catch (error) {
     throw error.response?.data || error;

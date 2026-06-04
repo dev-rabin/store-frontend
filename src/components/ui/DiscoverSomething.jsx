@@ -12,7 +12,7 @@ import Heading from "./Heading";
 import Loader from "./Loader";
 import { fetchNewArrivals } from "../../services/storeApis";
 import { useNavigate } from "react-router-dom";
-import AddToCart from "./AddToCart";
+import AddToCart from "./AddToCartBtn";
 
 const DiscoverProducts = () => {
   const navigate = useNavigate();

@@ -15,6 +15,7 @@ import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
 import PaymentReturn from "./pages/PaymentReturn";
 import AboutUs from "./pages/AboutUs";
+import Checkout from "./pages/Checkout";
 
 const App = () => {
   const token = localStorage.getItem("token");
@@ -40,7 +41,7 @@ const App = () => {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/products" element={<Products />} />
         <Route path="/product-detail/:id" element={<ProductDetails />} />
-        
+
         {/* Protected Routes */}
 
         <Route
@@ -75,6 +76,15 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <Checkout />
             </ProtectedRoute>
           }
         />

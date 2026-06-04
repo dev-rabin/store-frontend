@@ -7,11 +7,11 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const data = await getProfile();
+        const response = await getProfile();
 
-        console.log(data);
+        console.log(response);
 
-        setUser(data);
+        setUser(response.user);
       } catch (error) {
         console.log(error);
       }
@@ -40,12 +40,10 @@ const Profile = () => {
           <div className="grid lg:grid-cols-3">
             {/* Left Profile Card */}
             <div className="relative overflow-hidden bg-gradient-to-br from-red-500 via-pink-500 to-orange-500 p-8 text-white">
-              {/* Decorative Elements */}
               <div className="absolute -top-16 -right-16 w-52 h-52 bg-white/10 rounded-full"></div>
               <div className="absolute -bottom-12 -left-12 w-40 h-40 bg-white/10 rounded-full"></div>
 
               <div className="relative flex flex-col items-center">
-                {/* Avatar */}
                 <div className="w-36 h-36 rounded-full bg-white shadow-2xl border-4 border-white flex items-center justify-center text-6xl font-bold text-red-500">
                   {initial}
                 </div>
@@ -62,7 +60,6 @@ const Profile = () => {
                   ⭐ Active Member
                 </span>
 
-                {/* Quick Stats */}
                 <div className="grid grid-cols-2 gap-4 mt-8 w-full">
                   <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-center">
                     <h4 className="text-xl font-bold">
@@ -81,7 +78,6 @@ const Profile = () => {
 
             {/* Right Section */}
             <div className="lg:col-span-2 p-8">
-              {/* Header */}
               <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-4">
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900">
@@ -110,7 +106,7 @@ const Profile = () => {
                     type="text"
                     value={user.name}
                     readOnly
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 focus:outline-none"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-gray-50"
                   />
                 </div>
 
@@ -123,7 +119,7 @@ const Profile = () => {
                     type="email"
                     value={user.email}
                     readOnly
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 focus:outline-none"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-gray-50"
                   />
                 </div>
 
@@ -136,7 +132,7 @@ const Profile = () => {
                     type="text"
                     value={user.phone || "Not Added"}
                     readOnly
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 focus:outline-none"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-gray-50"
                   />
                 </div>
 
@@ -156,9 +152,63 @@ const Profile = () => {
                       },
                     )}
                     readOnly
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 focus:outline-none"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-gray-50"
                   />
                 </div>
+              </div>
+
+              {/* Address Section */}
+              <div className="mt-10">
+                <h2 className="text-2xl font-bold text-gray-900 mb-5">
+                  Saved Addresses
+                </h2>
+
+                {user?.addresses?.length > 0 ? (
+                  <div className="space-y-4">
+                    {user.addresses.map((address) => (
+                      <div
+                        key={address.id}
+                        className="border border-gray-200 rounded-2xl p-5 bg-gray-50 hover:shadow-md transition-all"
+                      >
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-3">
+                          <h3 className="font-semibold text-lg text-gray-900">
+                            {address.full_name}
+                          </h3>
+
+                          {address.is_default && (
+                            <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium w-fit">
+                              Default Address
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="space-y-1 text-gray-600">
+                          <p>{address.address_line_1}</p>
+
+                          {address.address_line_2 && (
+                            <p>{address.address_line_2}</p>
+                          )}
+
+                          <p>
+                            {address.city}, {address.state}
+                          </p>
+
+                          <p>
+                            {address.pincode}, {address.country}
+                          </p>
+
+                          <p className="font-medium text-gray-800 mt-2">
+                            📞 {address.phone}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="border border-dashed border-gray-300 rounded-2xl p-8 text-center">
+                    <p className="text-gray-500">No addresses found.</p>
+                  </div>
+                )}
               </div>
 
               {/* Additional Info Cards */}
@@ -181,7 +231,6 @@ const Profile = () => {
                 </div>
               </div>
 
-              {/* Action Button */}
               <div className="mt-10">
                 <button className="bg-red-500 hover:bg-red-600 transition-all duration-300 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl">
                   Edit Profile

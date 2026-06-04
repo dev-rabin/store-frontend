@@ -4,9 +4,10 @@ import React, { useEffect, useState } from "react";
 import ViewAllBtn from "./ViewAllBtn";
 import Heading from "./Heading";
 import { fetchProducts } from "../../services/storeApis";
-import AddToCart from "./AddToCart";
+import AddToCart from "./AddToCartBtn";
 import Loader from "./Loader";
 import { useNavigate } from "react-router-dom";
+import BuyNowBtn from "./BuyNowBtn";
 
 const TodayDeal = () => {
   const navigate = useNavigate();
@@ -103,12 +104,7 @@ const TodayDeal = () => {
               <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition duration-500" />
 
               <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 translate-y-20 gap-1 sm:gap-2 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                <button
-                  onClick={() => navigate(`/product-detail/${product.id}`)}
-                  className="rounded-full bg-white px-2 py-1 text-[10px] sm:px-3 sm:py-1.5 sm:text-xs md:text-sm font-medium shadow-lg whitespace-nowrap"
-                >
-                  Quick View
-                </button>
+                <BuyNowBtn productId={product.id} />
 
                 <AddToCart productId={product.id} />
               </div>

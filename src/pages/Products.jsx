@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fetchCategories, fetchProducts } from "../services/storeApis";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Loader from "../components/ui/Loader";
-import AddToCart from "../components/ui/AddToCart";
+import AddToCart from "../components/ui/AddToCartBtn";
 
 const Products = () => {
   const navigate = useNavigate();

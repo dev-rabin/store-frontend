@@ -50,7 +50,7 @@
 
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    
+
     <!-- Google tag (gtag.js) -->
     <script
       async
@@ -70,5 +70,15 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <!-- Event snippet for Purchase conversion page -->
+    <script>
+      gtag("event", "conversion", {
+        send_to: "AW-18209134619/t3bzCKLro7gcEJuw5epD",
+        value: 1.0,
+        currency: "INR",
+        transaction_id: "",
+        // 'new_customer': true /* calculate dynamically, populate with true/false */,
+      });
+    </script>
   </body>
 </html>

@@ -6,14 +6,15 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchProduct } from "../services/storeApis";
-import AddToCart from "../components/ui/AddToCart";
+import AddToCart from "../components/ui/AddToCartBtn";
 import Loader from "../components/ui/Loader";
+import BuyNowBtn from "../components/ui/BuyNowBtn";
 
 const ProductDetails = () => {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -101,19 +102,6 @@ const ProductDetails = () => {
             >
               {product.name}
             </h1>
-
-            {/* Rating */}
-            {/* <div className="flex items-center mt-3 sm:mt-4">
-              <div className="flex gap-1 text-amber-400 text-sm sm:text-base">
-                {[...Array(5)].map((_, index) => (
-                  <FontAwesomeIcon key={index} icon={faStar} />
-                ))}
-              </div>
-
-              <span className="ml-2 sm:ml-3 text-xs sm:text-sm text-gray-500">
-                (24 Reviews)
-              </span>
-            </div> */}
 
             {/* Price */}
             <div className="mt-4 sm:mt-6">
@@ -209,8 +197,13 @@ const ProductDetails = () => {
             </div>
 
             {/* Actions */}
-            <div className="flex flex-wrap gap-3 sm:gap-4 mt-6 sm:mt-10">
-              <AddToCart productId={product.id} />
+            <div className="flex gap-3 sm:gap-4 mt-6 sm:mt-10 w-full">
+              <div className="flex-1">
+                <AddToCart productId={product.id} />
+              </div>
+              <div className="flex-1">
+                <BuyNowBtn productId={product.id} />
+              </div>
             </div>
 
             {/* Features */}
