@@ -172,3 +172,35 @@ export const createPayment = async (orderId) => {
 
   return response.data;
 };
+
+export const addAddress = async (data) => {
+  try {
+    const res = await API.post("/addresses", data);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAddresses = async () => {
+  try {
+    const res = await API.get("/addresses");
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteAddress = async (id) => {
+  try {
+    const res = await API.delete(`/addresses/${id}`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const setDefaultAddress = async (id) => {
+  const res = await API.put(`/addresses/${id}/default`);
+  return res.data;
+};

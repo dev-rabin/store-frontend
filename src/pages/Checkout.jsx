@@ -6,6 +6,7 @@ import {
   getCart,
   fetchProduct,
 } from "../services/storeApis";
+import Loader from "../components/ui/Loader";
 
 const Checkout = () => {
   const [searchParams] = useSearchParams();
@@ -118,6 +119,16 @@ const Checkout = () => {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <>
+        <div className="min-h-screen flex justify-center items-center">
+          <Loader />
+        </div>
+      </>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
