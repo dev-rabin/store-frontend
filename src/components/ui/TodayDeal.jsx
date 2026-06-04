@@ -86,7 +86,7 @@ const TodayDeal = () => {
               {/* Discount Badge */}
               <div className="absolute left-2 top-2 sm:left-3 sm:top-3 lg:left-4 lg:top-4 z-20">
                 <span className="rounded-full bg-gradient-to-r from-red-500 to-pink-500 px-2 py-1 sm:px-3 lg:px-4 lg:py-1.5 text-[10px] sm:text-xs font-semibold text-white shadow-lg">
-                  SAVE {product.discount || 0}%
+                  SAVE {product.discount || 10}%
                 </span>
               </div>
 
