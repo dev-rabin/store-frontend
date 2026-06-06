@@ -65,6 +65,7 @@ const TodayDeal = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
         {products.map((product) => (
           <div
+            onClick={()=> navigate(`/product-detail/${product.id}`)}
             key={product.id}
             className="
         group

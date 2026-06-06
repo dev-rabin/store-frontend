@@ -197,11 +197,12 @@ const ProductDetails = () => {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-3 sm:gap-4 mt-6 sm:mt-10 w-full">
-              <div className="flex-1">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-2 mt-6 sm:mt-10 w-full">
+              <div className="w-full sm:flex-1">
                 <AddToCart productId={product.id} />
               </div>
-              <div className="flex-1">
+
+              <div className="w-full sm:flex-1">
                 <BuyNowBtn productId={product.id} />
               </div>
             </div>
