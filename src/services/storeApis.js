@@ -58,6 +58,16 @@ export const trackOrder = async (orderNumber, phone) => {
   }
 };
 
+export const getPaymentDetails = async (txnId) => {
+  try {
+    const res = await API.get(`/payment/details/${txnId}`);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 export const login = async (data) => {
   try {
     const res = await API.post("/login", data);
