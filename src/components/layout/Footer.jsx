@@ -28,14 +28,6 @@ export default function Footer() {
                   support@mobilevarse.com
                 </a>
               </li>
-              <li>
-                <a
-                  href="tel:+919876543210"
-                  className="hover:text-white transition"
-                >
-                  +91 9871090570
-                </a>
-              </li>
             </ul>
           </div>
 
