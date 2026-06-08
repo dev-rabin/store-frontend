@@ -1,18 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useAuth } from "./AuthContext";
-import { getCart } from "../services/storeApis";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartCount, setCartCount] = useState(0);
-  const { isLoggedIn } = useAuth();
 
-  const fetchCartCount = async () => {
+  const fetchCartCount = () => {
     try {
-      const data = await getCart();
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      const count = data.cart.reduce((total, item) => total + item.quantity, 0);
+      const count = cart.reduce((total, item) => total + item.quantity, 0);
 
       setCartCount(count);
     } catch (error) {
@@ -22,12 +19,18 @@ export const CartProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (isLoggedIn) {
+    fetchCartCount();
+
+    const handleStorageChange = () => {
       fetchCartCount();
-    } else {
-      setCartCount(0);
-    }
-  }, [isLoggedIn]);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   return (
     <CartContext.Provider

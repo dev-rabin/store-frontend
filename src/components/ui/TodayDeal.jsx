@@ -65,7 +65,6 @@ const TodayDeal = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
         {products.map((product) => (
           <div
-            onClick={() => navigate(`/product-detail/${product.id}`)}
             key={product.id}
             className="
         group
@@ -81,7 +80,6 @@ const TodayDeal = () => {
         duration-300
         hover:-translate-y-1
         lg:hover:-translate-y-2
-        hover:cursor-pointer
       "
           >
             <div className="relative h-40 sm:h-52 md:h-60 lg:h-80 overflow-hidden">
@@ -108,7 +106,7 @@ const TodayDeal = () => {
               <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 translate-y-20 gap-1 sm:gap-2 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
                 <BuyNowBtn productId={product.id} />
 
-                <AddToCart productId={product.id} />
+                <AddToCart product={product} />
               </div>
             </div>
 
@@ -117,7 +115,10 @@ const TodayDeal = () => {
                 {product.category || "Electronics"}
               </p>
 
-              <h3 className="mb-2 lg:mb-3 text-sm sm:text-base lg:text-lg font-semibold text-gray-900 line-clamp-2 min-h-[40px] sm:min-h-[48px]">
+              <h3
+                onClick={() => navigate(`/product-detail/${product.id}`)}
+                className="mb-2 lg:mb-3 text-sm sm:text-base lg:text-lg font-semibold text-gray-900 line-clamp-2 min-h-[40px] sm:min-h-[48px] hover:cursor-pointer hover:underline"
+              >
                 {product.name}
               </h3>
 

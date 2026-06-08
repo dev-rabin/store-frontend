@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {
-  getProfile,
-  checkout,
-  getCart,
-  fetchProduct,
-} from "../services/storeApis";
+import { checkout, createPayment, fetchProduct } from "../services/storeApis";
 import Loader from "../components/ui/Loader";
 
 const Checkout = () => {
@@ -13,65 +8,92 @@ const Checkout = () => {
 
   const productId = searchParams.get("product_id");
   const quantity = Number(searchParams.get("quantity")) || 1;
-
   const navigate = useNavigate();
 
-  const [addresses, setAddresses] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [product, setProduct] = useState(null);
 
   const [cartItems, setCartItems] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
 
-  const [product, setProduct] = useState(null);
+  const [formData, setFormData] = useState(() => {
+    const saved = localStorage.getItem("customer_details");
+    return saved
+      ? JSON.parse(saved)
+      : {
+          customer_name: "",
+          customer_email: "",
+          customer_phone: "",
+          shipping_address: "",
+          city: "",
+          state: "",
+          pincode: "",
+        };
+  });
 
+  const [errors, setErrors] = useState({});
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.customer_name.trim()) {
+      newErrors.customer_name = "Full name is required";
+    } else if (!/^[A-Za-z ]{2,50}$/.test(formData.customer_name)) {
+      newErrors.customer_name = "Enter a valid name";
+    }
+
+    if (!formData.customer_email.trim()) {
+      newErrors.customer_email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.customer_email)) {
+      newErrors.customer_email = "Enter a valid email";
+    }
+
+    if (!formData.customer_phone.trim()) {
+      newErrors.customer_phone = "Phone number is required";
+    } else if (!/^[6-9]\d{9}$/.test(formData.customer_phone)) {
+      newErrors.customer_phone = "Enter a valid 10 digit mobile number";
+    }
+
+    if (!formData.shipping_address.trim()) {
+      newErrors.shipping_address = "Address is required";
+    }
+
+    if (!formData.city.trim()) {
+      newErrors.city = "City is required";
+    }
+
+    if (!formData.state.trim()) {
+      newErrors.state = "State is required";
+    }
+
+    if (!formData.pincode.trim()) {
+      newErrors.pincode = "Pincode is required";
+    } else if (!/^\d{6}$/.test(formData.pincode)) {
+      newErrors.pincode = "Enter a valid 6 digit pincode";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
   useEffect(() => {
-    fetchAddresses();
-
     if (productId) {
       loadProduct();
     } else {
-      fetchCart();
+      loadCart();
     }
   }, []);
 
-  const fetchAddresses = async () => {
-    try {
-      const response = await getProfile();
+  const loadCart = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      const userAddresses = response.user?.addresses || [];
+    setCartItems(cart);
 
-      setAddresses(userAddresses);
+    const total = cart.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0,
+    );
 
-      const defaultAddress = userAddresses.find(
-        (address) => address.is_default,
-      );
-
-      if (defaultAddress) {
-        setSelectedAddress(defaultAddress.id);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const fetchCart = async () => {
-    try {
-      const data = await getCart();
-
-      const items = data.cart || [];
-
-      setCartItems(items);
-
-      const total = items.reduce(
-        (sum, item) => sum + item.product.price * item.quantity,
-        0,
-      );
-
-      setCartTotal(total);
-    } catch (error) {
-      console.error(error);
-    }
+    setCartTotal(total);
   };
 
   const loadProduct = async () => {
@@ -82,39 +104,52 @@ const Checkout = () => {
 
       setCartTotal(data.price * quantity);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
+  };
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const handleCheckout = async () => {
     try {
-      if (!selectedAddress) {
-        alert("Please select an address");
-        return;
-      }
-
+      if (!validateForm()) return;
       setLoading(true);
-
-      const payload = {
-        address_id: selectedAddress,
-      };
-
+      let items = [];
       if (productId) {
-        payload.product_id = Number(productId);
-        payload.quantity = quantity;
+        items = [
+          {
+            product_id: Number(productId),
+            quantity,
+          },
+        ];
+      } else {
+        items = cartItems.map((item) => ({
+          product_id: item.product_id,
+          quantity: item.quantity,
+        }));
       }
+      localStorage.setItem("customer_details", JSON.stringify(formData));
+      const orderRes = await checkout({
+        ...formData,
+        items,
+      });
 
-      const response = await checkout(payload);
+      const paymentRes = await createPayment(orderRes.order_id);
 
-      navigate(`/orders/${response.order_id}`);
+      if (paymentRes.checkout_url) {
+        localStorage.setItem("last_order_number", orderRes.order_number);
+
+        window.location.href = paymentRes.checkout_url;
+      }
     } catch (error) {
-      console.error(error);
+      console.log(error);
 
-      alert(
-        error?.message ||
-          error?.response?.data?.message ||
-          "Unable to place order",
-      );
+      alert(error?.message || "Unable to process checkout");
     } finally {
       setLoading(false);
     }
@@ -122,11 +157,9 @@ const Checkout = () => {
 
   if (loading) {
     return (
-      <>
-        <div className="min-h-screen flex justify-center items-center">
-          <Loader />
-        </div>
-      </>
+      <div className="min-h-screen flex justify-center items-center">
+        <Loader />
+      </div>
     );
   }
 
@@ -135,82 +168,126 @@ const Checkout = () => {
       <h1 className="text-3xl font-bold mb-6">Checkout</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Address Section */}
         <div className="lg:col-span-2">
           <div className="bg-white border rounded-2xl p-5">
-            <div className="flex justify-between items-center mb-5">
-              <h2 className="text-xl font-semibold">Delivery Address</h2>
+            <h2 className="text-xl font-semibold mb-5">Customer Details</h2>
 
-              <button
-                onClick={() => navigate("/profile")}
-                className="text-blue-600 font-medium"
-              >
-                Manage Addresses
-              </button>
+            <div className="grid md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                name="customer_name"
+                placeholder="Full Name"
+                value={formData.customer_name}
+                onChange={handleChange}
+                className="border rounded-lg p-3"
+              />
+
+              <input
+                type="email"
+                name="customer_email"
+                placeholder="Email"
+                value={formData.customer_email}
+                onChange={handleChange}
+                className="border rounded-lg p-3"
+              />
+              <input
+                type="tel"
+                name="customer_phone"
+                placeholder="Phone Number"
+                value={formData.customer_phone}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, "");
+
+                  if (value.length <= 10) {
+                    setFormData((prev) => ({
+                      ...prev,
+                      customer_phone: value,
+                    }));
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (
+                    !/[0-9]/.test(e.key) &&
+                    ![
+                      "Backspace",
+                      "Delete",
+                      "Tab",
+                      "ArrowLeft",
+                      "ArrowRight",
+                    ].includes(e.key)
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
+                className="border rounded-lg p-3"
+              />
+
+              <input
+                type="text"
+                name="pincode"
+                placeholder="Pincode"
+                value={formData.pincode}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, "");
+
+                  if (value.length <= 6) {
+                    setFormData((prev) => ({
+                      ...prev,
+                      pincode: value,
+                    }));
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (
+                    !/[0-9]/.test(e.key) &&
+                    ![
+                      "Backspace",
+                      "Delete",
+                      "Tab",
+                      "ArrowLeft",
+                      "ArrowRight",
+                    ].includes(e.key)
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
+                className="border rounded-lg p-3"
+              />
+
+              <input
+                type="text"
+                name="city"
+                placeholder="City"
+                value={formData.city}
+                onChange={handleChange}
+                className="border rounded-lg p-3"
+              />
+
+              <input
+                type="text"
+                name="state"
+                placeholder="State"
+                value={formData.state}
+                onChange={handleChange}
+                className="border rounded-lg p-3"
+              />
             </div>
 
-            {addresses.length === 0 ? (
-              <div className="text-center py-6">
-                <p className="mb-3 text-gray-500">No address found</p>
-
-                <button
-                  onClick={() => navigate("/profile")}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg"
-                >
-                  Add Address
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {addresses.map((address) => (
-                  <div
-                    key={address.id}
-                    onClick={() => setSelectedAddress(address.id)}
-                    className={`border rounded-xl p-4 cursor-pointer transition ${
-                      selectedAddress === address.id
-                        ? "border-red-500 bg-red-50"
-                        : "border-gray-200"
-                    }`}
-                  >
-                    <div className="flex gap-3">
-                      <input
-                        type="radio"
-                        checked={selectedAddress === address.id}
-                        onChange={() => setSelectedAddress(address.id)}
-                      />
-
-                      <div>
-                        <h3 className="font-semibold">{address.full_name}</h3>
-
-                        <p className="text-gray-500">{address.phone}</p>
-
-                        <p className="text-gray-600 mt-2">
-                          {[
-                            address.address_line_1,
-                            address.address_line_2,
-                            address.city,
-                            address.state,
-                            address.pincode,
-                            address.country,
-                          ]
-                            .filter(Boolean)
-                            .join(", ")}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <textarea
+              name="shipping_address"
+              placeholder="Full Address"
+              value={formData.shipping_address}
+              onChange={handleChange}
+              rows={4}
+              className="border rounded-lg p-3 w-full mt-4"
+            />
           </div>
         </div>
 
-        {/* Order Summary */}
         <div>
           <div className="bg-white border rounded-2xl p-5 sticky top-4">
             <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
 
-            {/* Buy Now Product */}
             {productId ? (
               product && (
                 <div className="border-b pb-4">
@@ -222,67 +299,42 @@ const Checkout = () => {
                     />
 
                     <div className="flex-1">
-                      <h3 className="font-medium">{product.name}</h3>
+                      <h3>{product.name}</h3>
 
-                      <p className="text-gray-500">Qty: {quantity}</p>
+                      <p>Qty: {quantity}</p>
                     </div>
 
-                    <div className="font-semibold">
-                      ₹{product.price * quantity}
-                    </div>
+                    <div>₹{product.price * quantity}</div>
                   </div>
                 </div>
               )
             ) : (
-              <>
-                {cartItems.length === 0 ? (
-                  <p>Your cart is empty</p>
-                ) : (
-                  <div className="space-y-4">
-                    {cartItems.map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center gap-4 border-b pb-4"
-                      >
-                        <img
-                          src={item.product.img}
-                          alt={item.product.name}
-                          className="w-16 h-16 rounded-lg object-cover"
-                        />
+              <div className="space-y-4">
+                {cartItems.map((item) => (
+                  <div
+                    key={item.product_id}
+                    className="flex items-center gap-4 border-b pb-4"
+                  >
+                    <img
+                      src={item.img}
+                      alt={item.name}
+                      className="w-16 h-16 rounded-lg object-cover"
+                    />
 
-                        <div className="flex-1">
-                          <h3 className="font-medium text-sm">
-                            {item.product.name}
-                          </h3>
+                    <div className="flex-1">
+                      <h3 className="text-sm">{item.name}</h3>
 
-                          <p className="text-gray-500 text-sm">
-                            Qty: {item.quantity}
-                          </p>
-                        </div>
+                      <p>Qty: {item.quantity}</p>
+                    </div>
 
-                        <div className="font-semibold text-sm">
-                          ₹{item.product.price * item.quantity}
-                        </div>
-                      </div>
-                    ))}
+                    <div>₹{item.price * item.quantity}</div>
                   </div>
-                )}
-              </>
+                ))}
+              </div>
             )}
 
-            {/* Price Summary */}
-            <div className="border-t mt-5 pt-5 space-y-3">
-              <div className="flex justify-between text-gray-600">
-                <span>Subtotal</span>
-                <span>₹{cartTotal}</span>
-              </div>
-
-              <div className="flex justify-between text-gray-600">
-                <span>Shipping</span>
-                <span>Free</span>
-              </div>
-
-              <div className="flex justify-between font-bold text-lg">
+            <div className="border-t mt-5 pt-5">
+              <div className="flex justify-between text-lg font-bold">
                 <span>Total</span>
                 <span>₹{cartTotal}</span>
               </div>
@@ -290,21 +342,10 @@ const Checkout = () => {
 
             <button
               onClick={handleCheckout}
-              disabled={loading || !selectedAddress}
-              className="
-                w-full
-                mt-6
-                bg-red-500
-                hover:bg-red-600
-                text-white
-                py-3
-                rounded-xl
-                font-semibold
-                transition
-                disabled:opacity-50
-              "
+              disabled={loading}
+              className="w-full mt-6 bg-red-500 hover:bg-red-600 text-white py-4 rounded-2xl font-semibold text-lg transition-all duration-300 disabled:opacity-50 shadow-lg"
             >
-              {loading ? "Placing Order..." : "Place Order"}
+              {loading ? "Processing..." : `Pay ₹${cartTotal}`}
             </button>
           </div>
         </div>

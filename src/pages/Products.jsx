@@ -209,7 +209,7 @@ const Products = () => {
                     </div>
 
                     <div>
-                      <AddToCart productId={product.id} />
+                      <AddToCart product={product} />
                     </div>
                   </div>
                 </div>

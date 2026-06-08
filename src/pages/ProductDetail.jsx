@@ -199,7 +199,7 @@ const ProductDetails = () => {
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-2 mt-6 sm:mt-10 w-full">
               <div className="w-full sm:flex-1">
-                <AddToCart productId={product.id} />
+                <AddToCart product={product} />
               </div>
 
               <div className="w-full sm:flex-1">

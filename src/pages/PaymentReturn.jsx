@@ -27,7 +27,7 @@ const PaymentReturn = () => {
             </div>
 
             <Link
-              to="/orders"
+              to="/track-order"
               className="inline-block mt-6 bg-black text-white px-6 py-3 rounded-2xl"
             >
               View Orders

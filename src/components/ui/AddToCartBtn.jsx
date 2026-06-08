@@ -1,18 +1,33 @@
 import React, { useState } from "react";
 import { useCart } from "../../context/CartContext";
-import { addToCart } from "../../services/storeApis";
 
-const AddToCartBtn = ({ productId }) => {
+const AddToCartBtn = ({ product }) => {
   const [loading, setLoading] = useState(false);
-  const { fetchCartCount } = useCart();
-
   const [added, setAdded] = useState(false);
 
-  const handleAddToCart = async () => {
+  const { fetchCartCount } = useCart();
+
+  const handleAddToCart = () => {
     try {
+      console.log("Add TO Cart");
       setLoading(true);
-      await addToCart(productId);
-      await fetchCartCount();
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const existingItem = cart.find((item) => item.product_id === product.id);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({
+          product_id: product.id,
+          name: product.name,
+          price: product.price,
+          img: product.img,
+          quantity: 1,
+        });
+      }
+      localStorage.setItem("cart", JSON.stringify(cart));
+      if (fetchCartCount) {
+        fetchCartCount();
+      }
       setAdded(true);
       setTimeout(() => {
         setAdded(false);

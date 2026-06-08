@@ -11,10 +11,6 @@ export const fetchCategories = async () => {
 
 export const fetchProducts = async (search = "", category = "") => {
   try {
-    console.log("API Params", {
-      search,
-      category,
-    });
     const res = await API.get("/products", {
       params: {
         search,
@@ -44,6 +40,21 @@ export const fetchProduct = async (id) => {
     return res.data.product;
   } catch (error) {
     console.error(error);
+  }
+};
+
+export const trackOrder = async (orderNumber, phone) => {
+  try {
+    const res = await API.get("/orders/track", {
+      params: {
+        order_number: orderNumber,
+        phone,
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    throw error.response?.data || error;
   }
 };
 

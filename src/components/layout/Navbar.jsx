@@ -1,54 +1,64 @@
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
-import {
-  faSearch,
-  faCartShopping,
-  faRightFromBracket,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import {
+  Link,
+  NavLink,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedIn } = useAuth();
   const { cartCount } = useCart();
-  const userName = localStorage.getItem("user_name") || "U";
-  const [search, setSearch] = useState("");
+
+  const [searchParams] = useSearchParams();
+
+  const [search, setSearch] = useState(searchParams.get("search") || "");
 
   const isActive = (path) => location.pathname === path;
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user_name");
-    setIsLoggedIn(false);
-    navigate("/login");
-  };
+  useEffect(() => {
+    setSearch(searchParams.get("search") || "");
+  }, [searchParams]);
 
   useEffect(() => {
-    if (!search.trim()) return;
+    if (location.pathname !== "/products") return;
 
     const timer = setTimeout(() => {
-      navigate(`/products?search=${encodeURIComponent(search)}`);
+      if (search.trim()) {
+        navigate(`/products?search=${encodeURIComponent(search)}`, {
+          replace: true,
+        });
+      }
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [search, navigate, location.pathname]);
 
   const handleSearch = (e) => {
     const value = e.target.value;
 
     setSearch(value);
 
+    if (location.pathname !== "/products") {
+      navigate(`/products?search=${encodeURIComponent(value)}`);
+      return;
+    }
+
     if (!value.trim()) {
       navigate("/products");
       return;
     }
 
-    navigate(`/products?search=${encodeURIComponent(value)}`);
+    navigate(`/products?search=${encodeURIComponent(value)}`, {
+      replace: true,
+    });
   };
+
   return (
     <>
       <nav className="max-w-7xl mx-auto py-4 px-4 flex items-center justify-between">
@@ -69,17 +79,6 @@ export default function Navbar() {
           </NavLink>
 
           <NavLink
-            to="/orders"
-            className={`transition duration-200 ${
-              isActive("/orders")
-                ? "text-red-500 font-semibold"
-                : "hover:text-red-500"
-            }`}
-          >
-            Orders
-          </NavLink>
-
-          <NavLink
             to="/products"
             className={`transition duration-200 ${
               isActive("/products")
@@ -88,6 +87,17 @@ export default function Navbar() {
             }`}
           >
             Products
+          </NavLink>
+
+          <NavLink
+            to="/track-order"
+            className={`transition duration-200 ${
+              isActive("/track-order")
+                ? "text-red-500 font-semibold"
+                : "hover:text-red-500"
+            }`}
+          >
+            Track Order
           </NavLink>
 
           <NavLink
@@ -107,10 +117,9 @@ export default function Navbar() {
             <input
               type="search"
               placeholder="Search products..."
-              className="w-72 bg-gray-100 rounded-lg py-3 pl-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-red-400"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={handleSearch}
+              onChange={handleSearch}
+              className="w-72 bg-gray-100 rounded-lg py-3 pl-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-red-400"
             />
 
             <FontAwesomeIcon
@@ -119,55 +128,21 @@ export default function Navbar() {
             />
           </div>
 
-          {!isLoggedIn ? (
-            <div className="flex items-center gap-3">
-              <Link
-                to="/login"
-                className="px-4 py-2 text-sm font-medium border rounded-lg hover:bg-gray-100"
-              >
-                Login
-              </Link>
+          <button
+            onClick={() => navigate("/cart")}
+            className="relative hover:scale-110 transition"
+          >
+            <FontAwesomeIcon
+              icon={faCartShopping}
+              className="text-xl text-gray-700"
+            />
 
-              <Link
-                to="/signup"
-                className="px-4 py-2 text-sm font-medium bg-red-500 text-white rounded-lg hover:bg-red-600"
-              >
-                Sign Up
-              </Link>
-            </div>
-          ) : (
-            <>
-              <button
-                onClick={() => navigate("/cart")}
-                className="relative hover:scale-110 transition"
-              >
-                <FontAwesomeIcon
-                  icon={faCartShopping}
-                  className="text-xl text-gray-700"
-                />
-
-                {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] h-5 w-5 rounded-full flex items-center justify-center">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
-              <div className="flex items-center gap-3">
-                <Link to="/profile">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white flex items-center justify-center font-bold">
-                    {userName.charAt(0).toUpperCase()}
-                  </div>
-                </Link>
-
-                <button
-                  onClick={handleLogout}
-                  className="w-10 h-10 rounded-full bg-gray-100 hover:bg-red-500 hover:text-white transition"
-                >
-                  <FontAwesomeIcon icon={faRightFromBracket} />
-                </button>
-              </div>
-            </>
-          )}
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] h-5 w-5 rounded-full flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </button>
         </div>
       </nav>
 
