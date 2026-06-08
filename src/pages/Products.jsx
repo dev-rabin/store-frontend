@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { faHeart, faStar, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fetchCategories, fetchProducts } from "../services/storeApis";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -107,7 +107,7 @@ const Products = () => {
 
       {/* Categories */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-10">
-        <div className="flex gap-2 sm:gap-3 lg:gap-4 overflow-x-auto scrollbar-hide">
+        <div className="flex gap-2 sm:gap-3 lg:gap-4 overflow-x-auto scrollbar-hide py-1">
           <button
             onClick={() => setSelectedCategory("")}
             className={`px-3 sm:px-4 lg:px-6 py-1.5 sm:py-2 lg:py-3 text-xs sm:text-sm lg:text-base rounded-full whitespace-nowrap transition ${
@@ -146,16 +146,7 @@ const Products = () => {
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="
-          border
-          rounded-lg
-          lg:rounded-xl
-          px-3
-          sm:px-4
-          py-2
-          text-sm
-          sm:text-base
-        "
+            className=" border rounded-lg lg:rounded-xl px-3 sm:px-4 py-2 text-sm sm:text-base"
           >
             <option value="latest">Latest</option>
             <option value="low-high">Price Low to High</option>
@@ -173,59 +164,19 @@ const Products = () => {
             filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="
-              group
-              bg-white
-              rounded-xl
-              sm:rounded-2xl
-              shadow-md
-              hover:shadow-xl
-              transition-all
-              duration-300
-              overflow-hidden
-            "
+                className=" group bg-white rounded-xl sm:rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden
+              "
               >
                 {/* Image */}
                 <div className="relative h-36 sm:h-44 md:h-52">
-                  <button
-                    className="
-                  absolute
-                  top-2
-                  right-2
-                  sm:top-3
-                  sm:right-3
-                  z-10
-                  w-7
-                  h-7
-                  sm:w-8
-                  sm:h-8
-                  lg:w-9
-                  lg:h-9
-                  rounded-full
-                  bg-white
-                  shadow
-                  flex
-                  items-center
-                  justify-center
-                  hover:bg-red-500
-                  hover:text-white
-                  transition
-                "
-                  >
+                  <button className=" absolute top-2 right-2 sm:top-3 sm:right-3 z-10 w-7 h-7 sm:w-8 sm:h-8 lg:w-9 lg:h-9 rounded-full bg-white shadow flex items-center justify-center hover:bg-red-500 hover:text-white transition">
                     <FontAwesomeIcon icon={faHeart} />
                   </button>
 
                   <img
                     src={product.img}
                     alt={product.name}
-                    className="
-                  h-full
-                  w-full
-                  object-cover
-                  transition
-                  duration-300
-                  group-hover:scale-105
-                "
+                    className=" h-full w-full object-cover transition duration-300 group-hover:scale-105"
                   />
                 </div>
 
@@ -237,18 +188,7 @@ const Products = () => {
 
                   <h3
                     onClick={() => navigate(`/product-detail/${product.id}`)}
-                    className="
-                  font-semibold
-                  text-xs
-                  sm:text-sm
-                  lg:text-base
-                  text-gray-900
-                  line-clamp-2
-                  min-h-[36px]
-                  sm:min-h-[48px]
-                  hover:underline
-                  cursor-pointer
-                "
+                    className=" font-semibold text-xs sm:text-sm lg:text-base text-gray-900 line-clamp-2 min-h-[36px] sm:min-h-[48px] hover:underline cursor-pointer"
                   >
                     {product.name}
                   </h3>
@@ -264,11 +204,13 @@ const Products = () => {
                   </div> */}
 
                   <div className="flex justify-between items-center mt-3 lg:mt-4">
-                    <span className="text-sm sm:text-lg lg:text-xl font-bold text-red-500">
+                    <div className="text-sm sm:text-lg lg:text-xl font-bold text-red-500">
                       ₹{product.price}
-                    </span>
+                    </div>
 
-                    <AddToCart productId={product.id} />
+                    <div>
+                      <AddToCart productId={product.id} />
+                    </div>
                   </div>
                 </div>
               </div>
