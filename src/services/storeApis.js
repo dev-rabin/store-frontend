@@ -58,15 +58,10 @@ export const trackOrder = async (orderNumber, phone) => {
   }
 };
 
-export const getPaymentDetails = async (txnId) => {
-  try {
-    const res = await API.get(`/payment/details/${txnId}`);
-    return res.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
+// export const getOrderDetails = async (orderNumber) => {
+//   const res = await API.get(`/payment/order-details/${orderNumber}`);
+//   return res.data;
+// };
 
 export const login = async (data) => {
   try {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { trackOrder } from "../services/storeApis";
 import Loader from "../components/ui/Loader";
 
@@ -11,30 +11,35 @@ const TrackOrder = () => {
 
   const handleTrack = async (e) => {
     e.preventDefault();
-
     if (!orderNumber || !phone) {
       alert("Please enter Order Number and Phone Number");
       return;
     }
-
     try {
       setLoading(true);
-
       const response = await trackOrder(orderNumber, phone);
-
       setOrder(response.order);
     } catch (error) {
       console.error(error);
-
       alert(
         error?.message || error?.response?.data?.message || "Order not found",
       );
-
       setOrder(null);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const lastOrderNumber = localStorage.getItem("last_order_number");
+    const customerPhone = localStorage.getItem("customer_phone");
+    if (lastOrderNumber) {
+      setOrderNumber(lastOrderNumber);
+    }
+    if (customerPhone) {
+      setPhone(customerPhone);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
