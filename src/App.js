@@ -19,7 +19,6 @@ const App = () => {
       <Navbar />
 
       <Routes>
-        {/* Public Routes */}
 
         <Route path="/" element={<Home />} />
 

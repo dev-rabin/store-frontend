@@ -18,11 +18,8 @@ const TodayDeal = () => {
       try {
         const data = await fetchProducts();
         console.log("Products API:", data);
-        const randomProducts = [...data]
-          .sort(() => Math.random() - 0.5)
-          .slice(0, 4);
-
-        setProducts(randomProducts);
+        const products = Array.isArray(data) ? data : data?.products || [];
+        setProducts(products.slice(0, 4));
       } catch (err) {
         setError("Failed to load products");
         console.error(err);
