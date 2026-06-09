@@ -5,25 +5,30 @@ import Loader from "../components/ui/Loader";
 const TrackOrder = () => {
   const [orderNumber, setOrderNumber] = useState("");
   const [phone, setPhone] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState(null);
 
   const handleTrack = async (e) => {
     e.preventDefault();
+
     if (!orderNumber || !phone) {
       alert("Please enter Order Number and Phone Number");
       return;
     }
+
     try {
       setLoading(true);
+
       const response = await trackOrder(orderNumber, phone);
+
       setOrder(response.order);
     } catch (error) {
       console.error(error);
+
       alert(
-        error?.message || error?.response?.data?.message || "Order not found",
+        error?.response?.data?.message || error?.message || "Order not found",
       );
+
       setOrder(null);
     } finally {
       setLoading(false);
@@ -32,19 +37,35 @@ const TrackOrder = () => {
 
   useEffect(() => {
     const lastOrderNumber = localStorage.getItem("last_order_number");
+
     const customerPhone = localStorage.getItem("customer_phone");
+
     if (lastOrderNumber) {
       setOrderNumber(lastOrderNumber);
     }
+
     if (customerPhone) {
       setPhone(customerPhone);
     }
   }, []);
 
+  const formatDateTime = (dateString) => {
+    if (!dateString) return "-";
+
+    return new Date(dateString).toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white rounded-3xl shadow-md p-8">
+    <div className="min-h-screen bg-gray-50 py-4 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-white rounded-3xl shadow-md p-6 md:p-8">
           <h1 className="text-3xl font-bold text-center mb-2">
             Track Your Order
           </h1>
@@ -53,13 +74,13 @@ const TrackOrder = () => {
             Enter your order number and phone number
           </p>
 
-          <form onSubmit={handleTrack} className="space-y-4">
+          <form onSubmit={handleTrack} className="grid md:grid-cols-3 gap-4">
             <input
               type="text"
               placeholder="Order Number"
               value={orderNumber}
               onChange={(e) => setOrderNumber(e.target.value)}
-              className="w-full border rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400"
+              className="border rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400"
             />
 
             <input
@@ -67,13 +88,13 @@ const TrackOrder = () => {
               placeholder="Phone Number"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full border rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400"
+              className="border rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400"
             />
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-semibold"
+              className="bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold py-3"
             >
               {loading ? "Tracking..." : "Track Order"}
             </button>
@@ -87,79 +108,90 @@ const TrackOrder = () => {
 
           {order && (
             <div className="mt-8 border rounded-2xl p-6 bg-gray-50">
-              <h2 className="text-xl font-bold mb-4">Order Details</h2>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3">
+                <h2 className="text-2xl font-bold">Order Details</h2>
 
-              <div className="space-y-2">
-                <p>
-                  <strong>Order Number:</strong> {order.order_number}
-                </p>
-
-                <p>
-                  <strong>Name:</strong> {order.customer_name}
-                </p>
-
-                <p>
-                  <strong>Phone:</strong> {order.customer_phone}
-                </p>
-
-                <p>
-                  <strong>Total Amount:</strong> ₹{order.total_amount}
-                </p>
-
-                <p>
-                  <strong>Payment Status:</strong>{" "}
+                <div className="flex gap-2">
                   <span
-                    className={`font-semibold ${
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${
                       order.payment_status === "paid"
-                        ? "text-green-600"
-                        : "text-orange-600"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-orange-100 text-orange-700"
                     }`}
                   >
-                    {order.payment_status}
+                    Payment: {order.payment_status}
                   </span>
-                </p>
 
-                <p>
-                  <strong>Order Status:</strong>{" "}
-                  <span className="font-semibold">{order.status}</span>
-                </p>
+                  <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">
+                    {order.status}
+                  </span>
+                </div>
+              </div>
 
-                <p>
-                  <strong>Address:</strong> {order.shipping_address}
-                </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <strong>Order Number:</strong>
+                  <div>{order.order_number}</div>
+                </div>
 
-                <p>
-                  <strong>City:</strong> {order.city}
-                </p>
+                <div>
+                  <strong>Customer Name:</strong>
+                  <div>{order.customer_name}</div>
+                </div>
 
-                <p>
-                  <strong>State:</strong> {order.state}
-                </p>
+                <div>
+                  <strong>Phone:</strong>
+                  <div>{order.customer_phone}</div>
+                </div>
 
-                <p>
-                  <strong>Pincode:</strong> {order.pincode}
-                </p>
+                <div>
+                  <strong>Total Amount:</strong>
+                  <div>₹{order.total_amount}</div>
+                </div>
+
+                <div>
+                  <strong>Order Date:</strong>
+                  <div>{formatDateTime(order.created_at)}</div>
+                </div>
+
+                <div>
+                  <strong>Pincode:</strong>
+                  <div>{order.pincode}</div>
+                </div>
+
+                <div>
+                  <strong>City:</strong>
+                  <div>{order.city}</div>
+                </div>
+
+                <div>
+                  <strong>State:</strong>
+                  <div>{order.state}</div>
+                </div>
+
+                <div className="md:col-span-2">
+                  <strong>Shipping Address:</strong>
+                  <div>{order.shipping_address}</div>
+                </div>
               </div>
 
               {order.items?.length > 0 && (
-                <div className="mt-6">
-                  <h3 className="font-bold mb-3">Products</h3>
+                <div className="mt-8">
+                  <h3 className="font-bold text-lg mb-4">Ordered Products</h3>
 
-                  <div className="space-y-3">
+                  <div className="grid md:grid-cols-2 gap-4">
                     {order.items.map((item) => (
                       <div
                         key={item.id}
-                        className="flex justify-between border rounded-xl p-3"
+                        className="bg-white border rounded-xl p-4"
                       >
-                        <div>
-                          <p className="font-medium">{item.product?.name}</p>
+                        <h4 className="font-semibold">{item.product?.name}</h4>
 
-                          <p className="text-sm text-gray-500">
-                            Qty: {item.quantity}
-                          </p>
+                        <div className="mt-2 flex justify-between text-sm text-gray-600">
+                          <span>Qty: {item.quantity}</span>
+
+                          <span>₹{item.price * item.quantity}</span>
                         </div>
-
-                        <div>₹{item.price * item.quantity}</div>
                       </div>
                     ))}
                   </div>
