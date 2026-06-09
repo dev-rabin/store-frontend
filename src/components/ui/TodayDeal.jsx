@@ -1,5 +1,3 @@
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import ViewAllBtn from "./ViewAllBtn";
 import Heading from "./Heading";
@@ -19,6 +17,7 @@ const TodayDeal = () => {
     const getProducts = async () => {
       try {
         const data = await fetchProducts();
+        console.log("Products API:", data);
         const randomProducts = [...data]
           .sort(() => Math.random() - 0.5)
           .slice(0, 4);
@@ -89,12 +88,6 @@ const TodayDeal = () => {
                   SAVE {product.discount || 10}%
                 </span>
               </div>
-
-              {/* Wishlist */}
-              <button className="absolute right-2 top-2 sm:right-3 sm:top-3 lg:right-4 lg:top-4 z-20 flex h-8 w-8 sm:h-9 sm:w-9 lg:h-11 lg:w-11 items-center justify-center rounded-full bg-white/80 backdrop-blur-md shadow-lg transition hover:bg-red-500 hover:text-white">
-                <FontAwesomeIcon icon={faHeart} />
-              </button>
-
               <img
                 src={product.img}
                 alt={product.name}
@@ -105,7 +98,6 @@ const TodayDeal = () => {
 
               <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 translate-y-20 gap-1 sm:gap-2 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
                 <BuyNowBtn productId={product.id} />
-
                 <AddToCart product={product} />
               </div>
             </div>
@@ -121,20 +113,6 @@ const TodayDeal = () => {
               >
                 {product.name}
               </h3>
-
-              {/* <div className="mb-3 lg:mb-4 flex items-center">
-                <div className="flex gap-0.5 sm:gap-1 text-amber-400 text-xs sm:text-sm">
-                  {[...Array(Math.round(product.rating || 5))].map(
-                    (_, index) => (
-                      <FontAwesomeIcon key={index} icon={faStar} />
-                    ),
-                  )}
-                </div>
-
-                <span className="ml-1 sm:ml-2 text-xs sm:text-sm text-gray-500">
-                  ({product.reviews || 0})
-                </span>
-              </div> */}
 
               <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
                 <div>
